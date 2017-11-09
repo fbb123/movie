@@ -22,28 +22,39 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">添加角色</h3>
                         </div>
-                        <form role="form">
+                        <form role="form" method="post">
+                        {% for msg in get_flashed_messages(category_filter=["error"]) %}
+                             <p class="login-box-msg" style="color:red">{{ msg }}</p>
+                         {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["success"]) %}
+                             <p class="login-box-msg" style="color:green">{{ msg }}</p>
+                         {% endfor %}
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="input_name">角色名称</label>
-                                    <input type="text" class="form-control" id="input_name" placeholder="请输入角色名称！">
-                                </div>
+                                    {{ form.name }}
+                                     {% for err in form.name.errors %}
+                                        <div class="col-md-12">
+                                         <span style="color:red">{{ err }}</span>
+                                        </div>
+                                     {% endfor %}
+                                 </div>
                                 <div class="form-group" id="auth_list">
                                     <div class="col-md-12">
                                         <label>操作权限</label>
                                     </div>
-                                    {% for i in range(1,19) %}
-                                    <div class="col-md-2">
-                                        <label>
-                                            <input type="checkbox" name="input_url"> 添加标签
-                                        </label>
-                                    </div>
-                                    {% endfor %}
+                                     {{ form.auths }}
+                                     {% for err in form.auths.errors %}
+                                        <div class="col-md-12">
+                                         <span style="color:red">{{ err }}</span>
+                                        </div>
+                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">添加</button>
-                            </div>
+                                {{ form.submit }}
+                                {{ form.csrf_token }}
+                             </div>
                         </form>
                     </div>
                 </div>

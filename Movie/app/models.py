@@ -1,13 +1,11 @@
 from datetime import datetime
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:19951116@127.0.0.1:3306/movie"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+from app import db
 
-db = SQLAlchemy(app)
+
+
 
 #会员
 class User(db.Model):
@@ -29,6 +27,10 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %r>" % self.name
+
+    def check_pwd(self,pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd,pwd)
 
 #会员登录日志
 class Userlog(db.Model):
@@ -147,6 +149,10 @@ class Admin(db.Model):
     def __repr__(self):
         return "<Admin %r>" % self.name
 
+    def check_pwd(self,pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd,pwd)
+
 #管理员登录日志
 class AdminLog(db.Model):
     __tablename__ = "admin_log"
@@ -171,7 +177,7 @@ class OperationLog(db.Model):
         return "<OperationLog %r>" % self.id
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # db.create_all()
     # role = Role(
     #     name = "超级管理员",
@@ -179,12 +185,12 @@ if __name__ == "__main__":
     # )
     # db.session.add(role)
     # db.session.commit()
-    from werkzeug.security import generate_password_hash
-    admin = Admin(
-        name = "admin",
-        pwd = generate_password_hash("admin123"),
-        is_super = 0,
-        role_id = 1
-    )
-    db.session.add(admin)
-    db.session.commit()
+    # from werkzeug.security import generate_password_hash
+    # admin = Admin(
+    #     name = "admin",
+    #     pwd = generate_password_hash("admin123"),
+    #     is_super = 0,
+    #     role_id = 1
+    # )
+    # db.session.add(admin)
+    # db.session.commit()

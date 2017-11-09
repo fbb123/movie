@@ -15,20 +15,32 @@
                 <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员中心</h3>
             </div>
             <div class="panel-body">
-                <form role="form">
+                <form role="form" method="post">
+                  {% for msg in get_flashed_messages(category_filter=["success"]) %}
+                             <p class="login-box-msg" style="color:green">{{ msg }}</p>
+                         {% endfor %}
                     <fieldset>
                             <div class="form-group">
                                 <label for="input_oldpwd"><span class="glyphicon glyphicon-lock"></span>&nbsp;旧密码</label>
-                                <input id="input_oldpwd" class="form-control" placeholder="旧密码" name="oldpwd" type="password" autofocus>
-                            </div>
-                            <div class="col-md-12" id="error_oldpwd"></div>
+                                {{ form.old_pwd }}
+                             </div>
+                            {% for err in form.old_pwd.errors %}
+                                        <div class="col-md-12">
+                                         <span style="color:red">{{ err }}</span>
+                                        </div>
+                                     {% endfor %}
                             <div class="form-group">
                                 <label for="input_newpwd"><span class="glyphicon glyphicon-lock"></span>&nbsp;新密码</label>
-                                <input id="input_newpwd" class="form-control" placeholder="新密码" name="newpwd" type="password" autofocus>
-                            </div>
-                            <div class="col-md-12" id="error_newpwd"></div>
-                            <a href="login.html" class="btn btn-success"><span class="glyphicon glyphicon-edit"></span>&nbsp;修改密码</a>
-                        </fieldset>
+                                {{ form.new_pwd }}
+                             </div>
+                            {% for err in form.new_pwd.errors %}
+                                        <div class="col-md-12">
+                                         <span style="color:red">{{ err }}</span>
+                                        </div>
+                                     {% endfor %}
+                        {{ form.submit }}
+                        {{ form.csrf_token }}
+                         </fieldset>
                 </form>
             </div>
         </div>

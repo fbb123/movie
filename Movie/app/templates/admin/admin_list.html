@@ -1,4 +1,5 @@
 {% extends 'admin/admin.html' %}
+{% import 'page.html' as pg %}
 {% block content %}
        <!--内容-->
         <section class="content-header">
@@ -36,28 +37,20 @@
                                     <th>管理员角色</th>
                                     <th>添加时间</th>
                                 </tr>
-                                {% for i in range(1,11) %}
+                                {% for admin in page_data.items %}
                                 <tr>
-                                    <td>1</td>
-                                    <td>jinlong</td>
-                                    <td>普通管理员</td>
-                                    <td>系统管理员</td>
-                                    <td>2017-06-01</td>
+                                    <td>{{ admin.id }}</td>
+                                    <td>{{ admin.name }}</td>
+                                    <td>{% if admin.is_super == 0 %}超级管理员{% else %}普通管理员{% endif %}</td>
+                                    <td>{{ admin.role.name }}</td>
+                                    <td>{{ admin.add_time }}</td>
                                 </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="box-footer clearfix">
-                            <ul class="pagination pagination-sm no-margin pull-right">
-                                <li><a href="#">首页</a></li>
-                                <li><a href="#">上一页</a></li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">下一页</a></li>
-                                <li><a href="#">尾页</a></li>
-                            </ul>
+                           {{ pg.page(page_data,'admin.admin_list') }}
                         </div>
                     </div>
                 </div>
