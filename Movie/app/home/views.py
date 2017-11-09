@@ -278,32 +278,5 @@ def play(id=None,page=None):
     return render_template('home/play.html',movie=movie,form=form,page_data=page_data)
 
 
-@home.route('/video/<int:id>/<int:page>/', methods=["GET", "POST"])
-def video(id=None, page=None):
-    movie = Movie.query.get_or_404(int(id))
-    movie.play_num += 1
-    form = CommentForm()
-    if page is None:
-        page = 1
-
-    page_data = Comment.query.join(Movie).join(User).filter(Movie.id == movie.id, User.id == Comment.user_id
-                                                            ).order_by(Comment.add_time.desc()
-                                                                       ).paginate(page=page, per_page=10)
-    if "user" in session and form.validate_on_submit():
-        data = form.data
-        comment = Comment(
-            content=data["content"],
-            movie_id=movie.id,
-            user_id=session["user_id"]
-        )
-        db.session.add(comment)
-        db.session.commit()
-        db.session.add(movie)
-        db.session.commit()
-        movie.comment_num += 1
-        flash("评论成功", "success")
-        return redirect(url_for('home.video', id=movie.id, page=1))
-    db.session.add(movie)
-    db.session.commit()
-    return render_template('home/video.html', movie=movie, form=form, page_data=page_data)
+ 
 
